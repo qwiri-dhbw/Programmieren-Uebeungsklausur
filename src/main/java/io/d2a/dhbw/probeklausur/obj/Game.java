@@ -2,6 +2,7 @@ package io.d2a.dhbw.probeklausur.obj;
 
 
 import io.d2a.eeee.PromptFactory;
+import io.d2a.eeee.annotation.annotations.common.Range;
 import io.d2a.eeee.annotation.annotations.prompt.Default;
 import io.d2a.eeee.annotation.annotations.prompt.Prompt;
 import io.d2a.eeee.annotation.annotations.prompt.Split;
@@ -9,7 +10,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -21,6 +21,7 @@ public class Game {
         @Prompt("Eingabe")
         @Split(" ")
         @Default("T20 T20 T20")
+        @Range({1, 3})
         String[] read();
 
     }
@@ -71,10 +72,8 @@ public class Game {
             System.out.printf("%n👋 %s ist dran. Dem Spieler fehlen %d Punkte zum Sieg.%n",
                 player.getName(), player.getRemainingPoints());
 
-            final String[] values = wiz.read();
-
             // parse fields from values
-            final Field[] fields = Stream.of(values)
+            final Field[] fields = Stream.of(wiz.read())
                 .map(this.board::parseField)
                 .filter(Objects::nonNull)
                 .toArray(Field[]::new);
@@ -91,7 +90,7 @@ public class Game {
                 try {
                     this.onWin(player);
                 } catch (IOException e) {
-                    System.out.println("Cannot write to highscores:");
+                    System.out.println("Cannot write to high scores:");
                     e.printStackTrace();
                 }
             } else if (remaining <= 170) {

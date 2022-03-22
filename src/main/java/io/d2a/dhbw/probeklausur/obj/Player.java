@@ -9,10 +9,9 @@ public class Player {
     public static final boolean DOUBLE_OUT = true;
 
     private final String name;
-
-    private int visitIndex = 0;
     private final Visit[] visits = new Visit[10];
 
+    private int visitIndex = 0;
     private int countDartsThrown;
 
     public Player(final String name) {
@@ -27,12 +26,10 @@ public class Player {
     }
 
     public boolean addVisit(final Visit visit) {
-        final int value = visit.getValue();
-        if (this.getRemainingPoints() < value) {
-            return false;
-        }
+        this.countDartsThrown += visit.getFields().length;
 
-        int remaining = this.getRemainingPoints();
+        final int value = visit.getValue();
+        final int remaining = this.getRemainingPoints();
         if (remaining < value) {
             return false;
         }
@@ -44,15 +41,12 @@ public class Player {
                     return false;
                 }
             }
-
-            // double out
             if (remaining - value == 1) {
                 return false;
             }
         }
 
         this.visits[this.visitIndex++] = visit;
-        this.countDartsThrown += visit.getFields().length;
         return true;
     }
 
